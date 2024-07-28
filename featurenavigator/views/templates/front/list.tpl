@@ -18,12 +18,34 @@
 {extends file='layouts/layout-left-column.tpl'}
 
 {block name="left_column"}
-    <div id="left-column" class="col-xs-12 col-sm-4 col-md-3">
-        <div class="nav-bar">
+    <div id="left-column" class="col-xs-12 col-sm-4 col-md-3 feature-navigator">
+        <div class="nav-bar card card-block">
             {foreach range('A', 'Z') as $char}
-                <a href="/{$baseUrl}/{$char}" class="nav-link">{$char}</a>
+                <div><a href="/{$baseUrl}/list/{$char}" class="nav-link">{$char}</a></div>
             {/foreach}
-            <a href="/{$baseUrl}/_" class="nav-link">#</a>
+            <div><a href="/{$baseUrl}/list/_" class="nav-link">#</a></div>
+        </div>
+    </div>
+{/block}
+
+{block name="content_wrapper"}
+    <div id="content-wrapper" class="js-content-wrapper left-column col-xs-12 col-sm-8 col-md-9 feature-navigator">
+        {block name="heading"}
+            <p>Some heading.</p>
+        {/block}
+        {block name="content"}
+            <p>Hello world! This is HTML5 Boilerplate.</p>
+        {/block}
+    </div>
+{/block}
+
+{block name="heading"}
+    <div class="block-category card card-block">
+        <h1 class="h1">{$heading}</h1>
+        <div class="block-category-inner">
+            <div id="category-description" class="text-muted">
+                <p>{l s='Listing for %letter%' sprintf=['%letter%' => strtoupper($letter)] d='Modules.Featurenavigator.Front'}</p>
+            </div>
         </div>
     </div>
 {/block}
@@ -32,18 +54,18 @@
     <section id="main">
 
         <section id="items">
-            <div class="feature-navigator">
+            <div class="item-list">
                 <!-- source: {$source}; order: {$direction}; letter: {$letter} -->
                 {if empty($entries)}
                     {if $letter == '#'}
-                        <h3>{l s='No articles found starting with non-alphabetic letters.' sprintf=['%letter%' => $letter] d='Modules.Featurenavigator.Front'}</h3>
+                        <p class="no-articles">{l s='No articles found starting with non-alphabetic letters.' d='Modules.Featurenavigator.Front'}</p>
                     {else}
-                        <h3>{l s='No articles found at %letter%.' sprintf=['%letter%' => strtoupper($letter)] d='Modules.Featurenavigator.Front'}</h3>
+                        <p class="no-articles">{l s='No articles found at %letter%.' sprintf=['%letter%' => strtoupper($letter)] d='Modules.Featurenavigator.Front'}</p>
                     {/if}
                 {else}
                     <ul>
                         {foreach $entries as $entry}
-                            <li>{$entry.topic}</li>
+                            <li><a href="/{$baseUrl}/products/{$entry.param}" class="feature-link">{$entry.topic}</a></li>
                         {/foreach}
                     </ul>
                 {/if}
@@ -51,5 +73,4 @@
         </section>
 
     </section>
-
 {/block}

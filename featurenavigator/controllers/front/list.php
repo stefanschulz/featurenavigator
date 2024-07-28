@@ -18,10 +18,11 @@
  */
 declare(strict_types=1);
 
+use PrestaShop\Module\FeatureNavigator\Entity\Definitions;
 use PrestaShop\Module\FeatureNavigator\Entity\DirectionOption;
 use PrestaShop\Module\FeatureNavigator\Entity\DirectionOptions;
-use PrestaShop\Module\FeatureNavigator\Entity\SourceOption;
 use PrestaShop\Module\FeatureNavigator\Entity\SourceOptions;
+use PrestaShop\Module\FeatureNavigator\Entity\HeadingOptions;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,12 +44,14 @@ class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
     {
         parent::initContent();
         $letter = Tools::getValue('letter', 'a');
+        $heading = Configuration::get(HeadingOptions::CONFIG, $this->context->language->id);
         $source = Configuration::get(SourceOptions::CONFIG);
         $direction = DirectionOptions::getOrDefault(Configuration::get(DirectionOptions::CONFIG));
         $entries = $this->getEntriesFilteredBy($letter, $source, $direction);
         $this->context->smarty->assign(
             [
-                'baseUrl' => 'featurenavigator/list',
+                'baseUrl' => 'featurenavigator',
+                'heading' => $this->ensureHeading($heading),
                 'letter' => SourceOptions::adjustValue($letter),
                 'entries' => $entries,
                 'source' => $source,
@@ -78,8 +81,18 @@ class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
             return [];
         }
         $result = $db->executeS($sql, true, false);
-
-        return $result ? $result : [];
+        if (empty($result)) {
+            return [];
+        }
+        $entries = [];
+        foreach ($result as $row) {
+            $topic = $row['topic'];
+            $entries[] = array(
+                'topic' => $topic,
+                'param' => urlencode($topic),
+            );
+        }
+        return $entries;
     }
 
     public function setMedia(): void
@@ -96,4 +109,10 @@ class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
             ]
         );
     }
+
+    private function ensureHeading(false|string $heading): string
+    {
+        return $heading ?: $this->getTranslator()->trans("Heading not translated", [], Definitions::TRANS_ADMIN);
+    }
+
 }

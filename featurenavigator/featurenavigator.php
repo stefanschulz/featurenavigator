@@ -22,6 +22,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use PrestaShop\Module\FeatureNavigator\Entity\Definitions;
 use PrestaShop\Module\FeatureNavigator\Entity\DirectionOptions;
+use PrestaShop\Module\FeatureNavigator\Entity\HeadingOptions;
 use PrestaShop\Module\FeatureNavigator\Entity\SourceOptions;
 
 if (!defined('_PS_VERSION_')) {
@@ -57,29 +58,39 @@ class FeatureNavigator extends Module
     public function install(): bool
     {
         return parent::install()
-            && Configuration::updateValue(SourceOptions::CONFIG, SourceOptions::getDefault())
-            && Configuration::updateValue(DirectionOptions::CONFIG, DirectionOptions::getDefault()->getValue())
+            && $this->installConfigs()
             && $this->installHooks();
     }
 
     public function uninstall(): bool
     {
-        return Configuration::deleteByName(SourceOptions::CONFIG)
-            && Configuration::deleteByName(DirectionOptions::CONFIG)
+        return $this->uninstallConfigs()
             && $this->uninstallHooks()
             && parent::uninstall();
     }
 
+    private function installConfigs(): bool
+    {
+        return Configuration::updateValue(SourceOptions::CONFIG, SourceOptions::getDefault())
+            && Configuration::updateValue(DirectionOptions::CONFIG, DirectionOptions::getDefault()->getValue())
+            && Configuration::updateValue(HeadingOptions::CONFIG, []);
+    }
+
+    private function uninstallConfigs(): bool
+    {
+        return Configuration::deleteByName(SourceOptions::CONFIG)
+            && Configuration::deleteByName(DirectionOptions::CONFIG)
+            && Configuration::deleteByName(HeadingOptions::CONFIG);
+    }
+
     private function installHooks(): bool
     {
-        return $this->registerHook('moduleRoutes')
-            && $this->registerHook('displayContentWrapperTop');
+        return $this->registerHook('moduleRoutes');
     }
 
     private function uninstallHooks(): bool
     {
-        return $this->unregisterHook('moduleRoutes')
-            && $this->unregisterHook('displayContentWrapperTop');
+        return $this->unregisterHook('moduleRoutes');
     }
 
     public function isUsingNewTranslationSystem(): bool
@@ -90,9 +101,9 @@ class FeatureNavigator extends Module
     /**
      * Backoffice admin content provisioning.
      *
+     * @throws Exception
      * @return void
      *
-     * @throws Exception
      */
     public function getContent(): void
     {
@@ -131,17 +142,21 @@ class FeatureNavigator extends Module
                     'module' => 'featurenavigator',
                 ],
             ],
+            'feature-navigator-list-products' => [
+                'rule' => 'featurenavigator/products/{feature}',
+                'keywords' => [
+                    'feature' => [
+                        'regexp' => '[\w\S]*',
+                        'param' => 'feature',
+                    ],
+                ],
+                'controller' => 'products',
+                'params' => [
+                    'fc' => 'module',
+                    'module' => 'featurenavigator',
+                ],
+            ],
         ];
-    }
-
-    /**
-     * Function hooked for showing the nav bar.
-     *
-     * @noinspection PhpUnused
-     */
-    public function hookDisplayContentWrapperTop($params): bool|string
-    {
-        return $this->fetch('module:featurenavigator/views/templates/front/headline.tpl');
     }
 
 }

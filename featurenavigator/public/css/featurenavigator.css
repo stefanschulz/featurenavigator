@@ -1,11 +1,30 @@
-.nav-bar {
-    background-color: #bbc7fb;
+.feature-navigator .nav-bar {
     padding: 4px;
-    margin: 0 auto 2rem;
+    margin: 0 auto;
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    /*justify-content: space-around;*/
 }
-.nav-link {
+
+.feature-navigator .nav-link {
     font-weight: bold;
-    margin: auto .5rem;
-    color: #0b0c40;
+    padding: 8px;
+    flex: 1 1 0;
+    width: 2rem;
+}
+
+.feature-navigator .item-list {
+    background-color: white;
+    padding: 2rem 0;
+    margin: 2rem 0;
+}
+
+.feature-navigator li {
+    padding: 2px 0;
+}
+
+.no-articles {
+    padding-left: 40px;
 }

@@ -23,6 +23,7 @@ namespace PrestaShop\Module\FeatureNavigator\Form;
 use PrestaShop\Module\FeatureNavigator\Entity\Definitions;
 use PrestaShop\Module\FeatureNavigator\Entity\DirectionOption;
 use PrestaShop\Module\FeatureNavigator\Entity\DirectionOptions;
+use PrestaShop\Module\FeatureNavigator\Entity\HeadingOptions;
 use PrestaShop\Module\FeatureNavigator\Entity\SourceOptions;
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use PrestaShop\PrestaShop\Core\ConfigurationInterface;
@@ -48,9 +49,11 @@ final class FeatureNavigatorDataConfiguration implements DataConfigurationInterf
 
     public function getConfiguration(): array
     {
+        $headings = $this->configuration->get(HeadingOptions::CONFIG);
         $source = $this->configuration->get(SourceOptions::CONFIG);
         $direction = $this->configuration->get(DirectionOptions::CONFIG);
         return [
+            HeadingOptions::FIELD => $headings,
             SourceOptions::FIELD => $source,
             DirectionOptions::FIELD => DirectionOptions::getOrDefault($direction),
         ];
@@ -60,6 +63,9 @@ final class FeatureNavigatorDataConfiguration implements DataConfigurationInterf
     {
         $errorMessages = [];
         if ($this->validateConfiguration($configuration)) {
+            /* @var $headingOptions array */
+            $headingOptions = $configuration[HeadingOptions::FIELD];
+            $this->configuration->set(HeadingOptions::CONFIG, $headingOptions);
             /* @var $sourceOption string */
             $sourceOption = $configuration[SourceOptions::FIELD];
             $this->configuration->set(SourceOptions::CONFIG, $sourceOption);
@@ -74,6 +80,8 @@ final class FeatureNavigatorDataConfiguration implements DataConfigurationInterf
 
     public function validateConfiguration(array $configuration): bool
     {
-        return isset($configuration[SourceOptions::FIELD]);
+        return isset($configuration[HeadingOptions::FIELD])
+            && isset($configuration[SourceOptions::FIELD]);
     }
+
 }
