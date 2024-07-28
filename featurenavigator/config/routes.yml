@@ -1,0 +1,7 @@
+feature_navigator_configuration:
+  path: /featurenavigator/configuration
+  methods: [GET, POST]
+  defaults:
+    _controller: 'PrestaShop\Module\FeatureNavigator\Controller\FeatureNavigatorConfigurationController::index'
+    _legacy_controller: AdminFeatureNavigator
+    _legacy_link: AdminFeatureNavigator
