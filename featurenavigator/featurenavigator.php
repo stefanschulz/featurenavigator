@@ -85,12 +85,14 @@ class FeatureNavigator extends Module
 
     private function installHooks(): bool
     {
-        return $this->registerHook('moduleRoutes');
+        return $this->registerHook('moduleRoutes')
+            && $this->registerHook('displayBackOfficeHeader');
     }
 
     private function uninstallHooks(): bool
     {
-        return $this->unregisterHook('moduleRoutes');
+        return $this->unregisterHook('moduleRoutes')
+            && $this->unregisterHook('displayBackOfficeHeader');
     }
 
     public function isUsingNewTranslationSystem(): bool
@@ -101,9 +103,9 @@ class FeatureNavigator extends Module
     /**
      * Backoffice admin content provisioning.
      *
-     * @throws Exception
      * @return void
      *
+     * @throws Exception
      */
     public function getContent(): void
     {
@@ -146,7 +148,7 @@ class FeatureNavigator extends Module
                 'rule' => 'featurenavigator/products/{feature}',
                 'keywords' => [
                     'feature' => [
-                        'regexp' => '[\w\S]*',
+                        'regexp' => '.*', // '[\w\S]*',
                         'param' => 'feature',
                     ],
                 ],
@@ -159,4 +161,14 @@ class FeatureNavigator extends Module
         ];
     }
 
+    /**
+     * Function hooked for enhancing the back office form.
+     *
+     * @noinspection PhpUnused
+     */
+    public function hookDisplayBackOfficeHeader()
+    {
+        //        return '<script type="module" src="' . $this->getPathUri() . 'views/js/form.js">';
+        $this->context->controller->addJS($this->getPathUri() . 'views/js/form.js');
+    }
 }

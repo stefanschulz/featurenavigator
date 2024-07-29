@@ -73,16 +73,41 @@ final class SourceOptions
           LEFT JOIN `ps_product_lang` sl ON sh.id_product = sl.id_product
           LEFT JOIN `ps_feature_product` fp ON sh.id_product = fp.id_product
           LEFT JOIN `ps_feature_lang` fl ON fp.id_feature = fl.id_feature
-          LEFT JOIN `ps_feature_value_lang` fvl ON fp.id_feature_value = fvl.id_feature_value AND fvl.id_lang = 1
+          LEFT JOIN `ps_feature_value_lang` fvl ON fp.id_feature_value = fvl.id_feature_value
           WHERE sl.id_lang = $lang
             AND sl.id_shop = $shop
             AND fl.id_lang = $lang
+            AND fvl.id_lang = $lang
             AND sh.active = 1
             AND sh.visibility IN ("both", "search")
             AND sh.indexed = 1
-            AND fp.id_feature = $feature
+            AND fp.id_feature = '$feature'
             AND $query
           ORDER BY fvl.value $order;
         EOT;
     }
+
+    public static function getProductSql(string $featureValue, string $feature, int $lang, ?int $shop): string
+    {
+        return <<<EOT
+        SELECT DISTINCT sh.id_product, sl.link_rewrite, sl.name
+          FROM `ps_product_shop` sh
+          LEFT JOIN `ps_product` sp ON sh.id_product = sp.id_product
+          LEFT JOIN `ps_product_lang` sl ON sh.id_product = sl.id_product
+          LEFT JOIN `ps_feature_product` fp ON sh.id_product = fp.id_product
+          LEFT JOIN `ps_feature_lang` fl ON fp.id_feature = fl.id_feature
+          LEFT JOIN `ps_feature_value_lang` fvl ON fp.id_feature_value = fvl.id_feature_value
+          WHERE sl.id_lang = $lang
+            AND sl.id_shop = $shop
+            AND fl.id_lang = $lang
+            AND fvl.id_lang = $lang
+            AND sh.active = 1
+            AND sh.visibility IN ("both", "search")
+            AND sh.indexed = 1
+            AND fp.id_feature = '$feature'
+            AND fvl.value LIKE '%$featureValue%'
+          ORDER BY sl.name ASC;
+        EOT;
+    }
+
 }

@@ -19,8 +19,6 @@
 declare(strict_types=1);
 
 use PrestaShop\Module\FeatureNavigator\Entity\Definitions;
-use PrestaShop\Module\FeatureNavigator\Entity\DirectionOption;
-use PrestaShop\Module\FeatureNavigator\Entity\DirectionOptions;
 use PrestaShop\Module\FeatureNavigator\Entity\HeadingOptions;
 use PrestaShop\Module\FeatureNavigator\Entity\SourceOptions;
 
@@ -31,12 +29,12 @@ if (!defined('_PS_VERSION_')) {
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 /**
- * Front controller for listing feature items based on a given letter..
+ * Front controller for listing products of a selected feature item.
  *
  * @noinspection PhpIllegalPsrClassPathInspection
  * @noinspection PhpUnused
  */
-class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
+class FeatureNavigatorProductsModuleFrontController extends \ModuleFrontController
 {
     /**
      * @throws \PrestaShopException
@@ -44,40 +42,36 @@ class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
     public function initContent(): void
     {
         parent::initContent();
-        $letter = Tools::getValue('letter', 'a');
         $heading = Configuration::get(HeadingOptions::CONFIG, $this->context->language->id);
-        $source = Configuration::get(SourceOptions::CONFIG);
-        $direction = DirectionOptions::getOrDefault(Configuration::get(DirectionOptions::CONFIG));
-        $entries = $this->getEntriesFilteredBy($letter, $source, $direction);
+        $feature = Configuration::get(SourceOptions::CONFIG, $this->context->language->id);
+        $featureValue = Tools::getValue('feature', '');
+        $entries = $featureValue ? $this->getProductsFilteredBy(urldecode($featureValue), $feature) : [];
         $this->context->smarty->assign(
             [
                 'baseUrl' => 'featurenavigator',
                 'heading' => $this->ensureHeading($heading),
-                'letter' => SourceOptions::adjustValue($letter),
+                'feature' => $feature,
+                'featureValue' => $featureValue,
                 'entries' => $entries,
-                'source' => $source,
-                'direction' => $direction->getLabel(),
             ]
         );
-        $this->setTemplate('module:featurenavigator/views/templates/front/list.tpl');
+        $this->setTemplate('module:featurenavigator/views/templates/front/products.tpl');
     }
 
     /**
-     * Get entries depending on the given source and filtered for the passed letter. Returning them in
-     * the desired order direction.
+     * Get products depending on the given feature filtered by a feature value.
      *
-     * @param mixed $letter The letter for filtering
-     * @param string $source The source to filter by
-     * @param DirectionOption $direction The direction to order the entries in
+     * @param string $featureValue The feature value to filter by
+     * @param string $feature The source to filter on
      *
-     * @return array The list of entries
+     * @return array The list of products
      *
      * @throws PrestaShopDatabaseException
      */
-    private function getEntriesFilteredBy(string $letter, string $source, DirectionOption $direction): array
+    private function getProductsFilteredBy(string $featureValue, string $feature): array
     {
         $db = Db::getInstance(_PS_USE_SQL_SLAVE_);
-        $sql = SourceOptions::getSql($letter, $source, $direction->getOrder(), $this->context->language->id, $this->context->shop->id);
+        $sql = SourceOptions::getProductSql($featureValue, $feature, $this->context->language->id, $this->context->shop->id);
         if (empty($sql)) {
             return [];
         }
@@ -85,16 +79,15 @@ class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
         if (empty($result)) {
             return [];
         }
-        $entries = [];
-        foreach ($result as $row) {
-            $topic = $row['topic'];
-            $entries[] = [
-                'topic' => $topic,
-                'param' => urlencode($topic),
-            ];
-        }
+        $products = $result;
 
-        return $entries;
+        // foreach ($result as $row) {
+        //      $topic = $row['?'];
+        //      $products[] = [
+        //      ];
+        // }
+
+        return $products;
     }
 
     public function setMedia(): void
