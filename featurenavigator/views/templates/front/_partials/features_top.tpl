@@ -19,7 +19,7 @@
     <h1 class="h1">{$heading}</h1>
     <div class="block-category-inner">
         <div id="category-description" class="text-muted">
-            <p>{l s='Listing for %letter%' sprintf=['%letter%' => strtoupper($letter)] d='Modules.Featurenavigator.Front'}</p>
+            <h2>{l s='Listing for %letter%' sprintf=['%letter%' => strtoupper($letter)] d='Modules.Featurenavigator.Front'}</h2>
         </div>
     </div>
 </div>

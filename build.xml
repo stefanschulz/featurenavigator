@@ -2,12 +2,17 @@
 <project name="FeatureNavigator" default="package">
 
     <property name="folder" value="featurenavigator"/>
+    <property name="version" value="1.0.0"/>
 
     <target name="package">
-        <delete file="${folder}.zip" quiet="true"/>
+        <delete quiet="true">
+            <fileset>
+                <include name="${folder}-*.zip"/>
+            </fileset>
+        </delete>
         <phingcall target="composer.install.production"/>
         <phingcall target="composer.dump"/>
-        <zip destfile="${folder}.zip">
+        <zip destfile="${folder}-${version}.zip">
             <fileset dir=".">
                 <include name="${folder}/**"/>
             </fileset>
