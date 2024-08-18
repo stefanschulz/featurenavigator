@@ -1,5 +1,7 @@
 <?php
-/**
+
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+/*
  * Copyright 2024 Stefan Schulz
  *
  * NOTICE OF LICENSE
@@ -21,6 +23,8 @@ declare(strict_types=1);
 use PrestaShop\Module\FeatureNavigator\Entity\Definitions;
 use PrestaShop\Module\FeatureNavigator\Entity\HeadingOptions;
 use PrestaShop\Module\FeatureNavigator\Entity\SourceOptions;
+use PrestaShop\Module\FeatureNavigator\Search\FeatureNavigatorProductSearchProvider;
+use PrestaShop\PrestaShop\Core\Product\Search\ProductSearchQuery;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -34,60 +38,94 @@ require_once __DIR__ . '/../../vendor/autoload.php';
  * @noinspection PhpIllegalPsrClassPathInspection
  * @noinspection PhpUnused
  */
-class FeatureNavigatorProductsModuleFrontController extends \ModuleFrontController
+class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontController
 {
-    /**
-     * @throws \PrestaShopException
-     */
+    private Module $module;
+    private string|false $feature;
+    private string|false $heading;
+
+    public function __construct()
+    {
+        $this->module = Module::getInstanceByName(Definitions::MODULE_NAME);
+        parent::__construct();
+        $this->controller_type = 'modulefront';
+    }
+
     public function initContent(): void
     {
         parent::initContent();
-        $heading = Configuration::get(HeadingOptions::CONFIG, $this->context->language->id);
-        $feature = Configuration::get(SourceOptions::CONFIG, $this->context->language->id);
-        $featureValue = Tools::getValue('feature', '');
-        $entries = $featureValue ? $this->getProductsFilteredBy(urldecode($featureValue), $feature) : [];
+
+        $this->heading = Configuration::get(HeadingOptions::CONFIG, $this->context->language->id);
+        $this->feature = Configuration::get(SourceOptions::CONFIG, $this->context->language->id);
+        $featureValue = $this->validate(Tools::getValue('feature', ''));
+
+        if (!$featureValue) {
+            Tools::redirect('feature-navigator-list');
+        }
+
         $this->context->smarty->assign(
             [
                 'baseUrl' => 'featurenavigator',
-                'heading' => $this->ensureHeading($heading),
-                'feature' => $feature,
-                'featureValue' => $featureValue,
-                'entries' => $entries,
+                'heading' => $this->ensureHeading($this->heading),
+                'feature' => $this->feature,
+                'featureValue' => urldecode($featureValue),
             ]
         );
-        $this->setTemplate('module:featurenavigator/views/templates/front/products.tpl');
+        $template = '../../../modules/featurenavigator/views/templates/front/products.tpl';
+        $this->doProductSearch($template);
     }
 
-    /**
-     * Get products depending on the given feature filtered by a feature value.
-     *
-     * @param string $featureValue The feature value to filter by
-     * @param string $feature The source to filter on
-     *
-     * @return array The list of products
-     *
-     * @throws PrestaShopDatabaseException
-     */
-    private function getProductsFilteredBy(string $featureValue, string $feature): array
+    protected function getAjaxProductSearchVariables(): array
     {
-        $db = Db::getInstance(_PS_USE_SQL_SLAVE_);
-        $sql = SourceOptions::getProductSql($featureValue, $feature, $this->context->language->id, $this->context->shop->id);
-        if (empty($sql)) {
-            return [];
-        }
-        $result = $db->executeS($sql, true, false);
-        if (empty($result)) {
-            return [];
-        }
-        $products = $result;
+        $search = $this->getProductSearchVariables();
 
-        // foreach ($result as $row) {
-        //      $topic = $row['?'];
-        //      $products[] = [
-        //      ];
-        // }
+        $rendered_products_top = $this->render('module:featurenavigator/views/templates/front/_partials/products_top', ['listing' => $search]);
+        $rendered_products = $this->render('catalog/_partials/products', ['listing' => $search]);
+        $data = array_merge(
+            [
+                'rendered_products_top' => $rendered_products_top,
+                'rendered_products' => $rendered_products,
+            ],
+            $search
+        );
 
-        return $products;
+        if (!empty($data['products']) && is_array($data['products'])) {
+            $data['products'] = $this->prepareProductArrayForAjaxReturn($data['products']);
+        }
+
+        return $data;
+    }
+
+    public function getTemplateFile($template, $params = [], $locale = null)
+    {
+        if (str_starts_with($template, 'module:')) {
+            return str_replace('module:', _PS_ROOT_DIR_ . _MODULE_DIR_, $template) . '.tpl';
+        }
+
+        return parent::getTemplateFile($template, $params, $locale);
+    }
+
+    public function getListingLabel(): bool|string
+    {
+        return $this->ensureHeading($this->heading);
+    }
+
+    protected function getProductSearchQuery(): ProductSearchQuery
+    {
+        $query = new ProductSearchQuery();
+        $query->setQueryType('feature-search');
+        $featureValue = Tools::getValue('feature', '');
+        $query->setSearchString(urldecode($featureValue));
+        $query->setSearchTag($this->feature);
+
+        return $query;
+    }
+
+    protected function getDefaultProductSearchProvider(): FeatureNavigatorProductSearchProvider
+    {
+        return new FeatureNavigatorProductSearchProvider(
+            Db::getInstance(_PS_USE_SQL_SLAVE_)
+        );
     }
 
     public function setMedia(): void
@@ -108,5 +146,42 @@ class FeatureNavigatorProductsModuleFrontController extends \ModuleFrontControll
     private function ensureHeading(false|string $heading): string
     {
         return $heading ?: $this->getTranslator()->trans('Heading not translated', [], Definitions::TRANS_ADMIN);
+    }
+
+    public function getBreadcrumbLinks(): array
+    {
+        $breadcrumb = parent::getBreadcrumbLinks();
+
+        $breadcrumb['links'][] = [
+            'title' => Configuration::get(HeadingOptions::CONFIG, $this->context->language->id),
+            'url' => $this->context->link->getModuleLink('featurenavigator', 'products'),
+        ];
+
+        return $breadcrumb;
+    }
+
+    private function validate(mixed $featureValue): false|string
+    {
+        if (empty($featureValue) || !is_string($featureValue)) {
+            return false;
+        }
+        $db = Db::getInstance(_PS_USE_SQL_SLAVE_);
+        $sql = SourceOptions::getAllSql($this->feature, $this->context->language->id, $this->context->shop->id);
+        if (empty($sql)) {
+            return false;
+        }
+        try {
+            $topic = urldecode($featureValue);
+            $result = $db->executeS($sql, true, false);
+            foreach ($result as $row) {
+                if ($row['topic'] == $topic) {
+                    return $topic;
+                }
+            }
+        } catch (PrestaShopDatabaseException $e) {
+            // ignore
+        }
+
+        return false;
     }
 }

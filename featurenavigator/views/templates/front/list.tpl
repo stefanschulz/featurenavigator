@@ -31,22 +31,11 @@
 {block name="content_wrapper"}
     <div id="content-wrapper" class="js-content-wrapper left-column col-xs-12 col-sm-8 col-md-9 feature-navigator">
         {block name="heading"}
-            <p>Some heading.</p>
+            {include file="module:featurenavigator/views/templates/front/_partials/features_top.tpl" heading=$heading letter=$letter}
         {/block}
         {block name="content"}
             <p>Hello world! This is HTML5 Boilerplate.</p>
         {/block}
-    </div>
-{/block}
-
-{block name="heading"}
-    <div class="block-category card card-block">
-        <h1 class="h1">{$heading}</h1>
-        <div class="block-category-inner">
-            <div id="category-description" class="text-muted">
-                <p>{l s='Listing for %letter%' sprintf=['%letter%' => strtoupper($letter)] d='Modules.Featurenavigator.Front'}</p>
-            </div>
-        </div>
     </div>
 {/block}
 
@@ -55,7 +44,6 @@
 
         <section id="items">
             <div class="item-list">
-                <!-- source: {$source}; order: {$direction}; letter: {$letter} -->
                 {if empty($entries)}
                     {if $letter == '#'}
                         <p class="no-articles">{l s='No articles found starting with non-alphabetic letters.' d='Modules.Featurenavigator.Front'}</p>
@@ -63,11 +51,7 @@
                         <p class="no-articles">{l s='No articles found at %letter%.' sprintf=['%letter%' => strtoupper($letter)] d='Modules.Featurenavigator.Front'}</p>
                     {/if}
                 {else}
-                    <ul>
-                        {foreach $entries as $entry}
-                            <li><a href="/{$baseUrl}/products/{$entry.param}" class="feature-link">{$entry.topic}</a></li>
-                        {/foreach}
-                    </ul>
+                    {include file="module:featurenavigator/views/templates/front/_partials/features.tpl" entries=$entries baseUrl=$baseUrl}
                 {/if}
             </div>
         </section>

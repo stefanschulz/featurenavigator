@@ -26,6 +26,7 @@ if (!defined('_PS_VERSION_')) {
 
 class Definitions
 {
+    const MODULE_NAME = 'featurenavigator';
     const TRANS_ADMIN = 'Modules.FeatureNavigator.Admin';
     const ERROR_MISSING_REQUIRED_FIELDS = 'Required fields must be given.';
 }

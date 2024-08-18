@@ -31,46 +31,26 @@
 {block name="content_wrapper"}
     <div id="content-wrapper" class="js-content-wrapper left-column col-xs-12 col-sm-8 col-md-9 feature-navigator">
         {block name="heading"}
-            <p>Some heading.</p>
+            {include file="module:featurenavigator/views/templates/front/_partials/products_top.tpl" heading=$heading listing=$listing}
         {/block}
+        {hook h="displayContentWrapperTop"}
         {block name="content"}
-            <p>Hello world! This is HTML5 Boilerplate.</p>
+            <p>The content section.</p>
         {/block}
-    </div>
-{/block}
-
-{block name="heading"}
-    <div class="block-category card card-block">
-        <h1 class="h1">{$heading}</h1>
-        <div class="block-category-inner">
-            <div id="category-description" class="text-muted">
-                <p>{l s='Listing for %value%' sprintf=['%value%' => $featureValue] d='Modules.Featurenavigator.Front'}</p>
-            </div>
-        </div>
+        {hook h="displayContentWrapperBottom"}
     </div>
 {/block}
 
 {block name='content'}
     <section id="main">
-
-        <section id="items">
-            <div class="item-list">
-                <!-- feature: {$feature}; value: {$featureValue} -->
-                {if empty($entries)}
-                    {if empty($featureValue)}
-                        <p class="no-articles">{l s='No product filter given.' d='Modules.Featurenavigator.Front'}</p>
-                    {else}
-                        <p class="no-articles">{l s='No articles found for %value%.' sprintf=['%value%' => $featureValue] d='Modules.Featurenavigator.Front'}</p>
-                    {/if}
-                {else}
-                    <ul>
-                        {foreach $entries as $entry}
-                            <li>{var_dump($entry)}</li>
-                        {/foreach}
-                    </ul>
-                {/if}
-            </div>
-        </section>
-
+        {if empty($listing['products'])}
+            {if empty($featureValue)}
+                <p class="no-articles">{l s='No product filter given.' d='Modules.Featurenavigator.Front'}</p>
+            {else}
+                <p class="no-articles">{l s='No articles found for %value%.' sprintf=['%value%' => $featureValue] d='Modules.Featurenavigator.Front'}</p>
+            {/if}
+        {else}
+            {include file="catalog/_partials/products.tpl" listing=$listing}
+        {/if}
     </section>
 {/block}

@@ -38,7 +38,7 @@ class FeatureNavigator extends Module
 {
     public function __construct()
     {
-        $this->name = 'featurenavigator';
+        $this->name = Definitions::MODULE_NAME;
         $this->author = 'Stefan Schulz';
         $this->version = '0.1.0';
         $this->need_instance = 0;
