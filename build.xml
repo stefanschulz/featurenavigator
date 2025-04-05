@@ -2,7 +2,7 @@
 <project name="FeatureNavigator" default="package">
 
     <property name="folder" value="featurenavigator"/>
-    <property name="version" value="1.0.0"/>
+    <property name="version" value="1.0.1"/>
 
     <target name="package">
         <delete quiet="true">

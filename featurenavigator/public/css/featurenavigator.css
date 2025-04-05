@@ -18,7 +18,7 @@
 .feature-navigator .item-list {
     background-color: white;
     display: flow-root;
-    padding: 2rem 0;
+    padding: 2rem 1rem;
     margin: 2rem 0;
 }
 

@@ -115,7 +115,7 @@ class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontC
         $query = new ProductSearchQuery();
         $query->setQueryType('feature-search');
         $featureValue = Tools::getValue('feature', '');
-        $query->setSearchString(urldecode($featureValue));
+        $query->setSearchString($this->prepareFeatureValue($featureValue));
         $query->setSearchTag($this->feature);
 
         return $query;
@@ -141,6 +141,11 @@ class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontC
                 'version' => 'release-2024-07',
             ]
         );
+    }
+
+    private function prepareFeatureValue(string $featureValue): string
+    {
+        return str_replace("'", "''", urldecode($featureValue));
     }
 
     private function ensureHeading(false|string $heading): string
