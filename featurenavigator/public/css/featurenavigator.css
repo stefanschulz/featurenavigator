@@ -1,0 +1,31 @@
+.feature-navigator .nav-bar {
+    padding: 4px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    /*justify-content: space-around;*/
+}
+
+.feature-navigator .nav-link {
+    font-weight: bold;
+    padding: 8px;
+    flex: 1 1 0;
+    width: 2rem;
+}
+
+.feature-navigator .item-list {
+    background-color: white;
+    display: flow-root;
+    padding: 2rem 1rem;
+    margin: 2rem 0;
+}
+
+.feature-navigator li {
+    padding: 2px 0;
+}
+
+.no-articles {
+    padding-left: 40px;
+}
