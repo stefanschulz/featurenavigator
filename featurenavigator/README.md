@@ -39,22 +39,21 @@ The module provides two routes that can be linked to. These are:
 
 To add a link to the feature navigator to the main menu, it has to be added as custom link, e.g., via the Main Menu
 module configuration page. On common sites, the above mentioned page "featurenavigator/list" should be used as url.
-If the site is set for multi-language use, the respective language code has to be prepended, e.g. "
-gb/featurenavigator/list"
-for the british page.
-
-## Reporting issues
-
-You can report issues with this module in the module's repository. [Click here to report an issue][report-issue].
+If the site is set for multi-language use, the respective language code has to be prepended, 
+e.g. "gb/featurenavigator/list" for the british page.
 
 ## Multistore compatibility
 
 Untested.
 
+## Reporting issues
+
+You can report issues with this module in the module's repository. [Click here to report an issue][report-issue].
+
 ## License
 
-This module is released under the [Academic Free License 3.0][AFL-3.0]
+This module is released under the [Apache License 2.0][Apache-2.0]
 
-[report-issue]: https://github.com/<todo>
+[report-issue]: https://github.com/stefanschulz/featurenavigator/issues
 
-[AFL-3.0]: https://opensource.org/licenses/AFL-3.0
+[Apache-2.0]: https://www.apache.org/licenses/LICENSE-2.0
