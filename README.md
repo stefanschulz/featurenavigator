@@ -18,7 +18,7 @@ The module implementation itself can be found in the featurenavigator subfolder,
 as the module must not contain any non-module files such as php-cs-fixer setup or build files.
 A Phing build-file is provided for creating an installable module package.
 
-## Reporting issues and sugggestions
+## Reporting issues and suggestions
 
 You can report issues or submit suggestions with this module in the module's repository.
 

@@ -2,7 +2,7 @@
 
 /** @noinspection PhpMultipleClassDeclarationsInspection */
 /*
- * Copyright 2025 Stefan Schulz
+ * Copyright 2026 Stefan Schulz
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * limitations under the License.
  *
  * @author    Stefan Schulz <schulz@the-loom.de>
- * @copyright 2025 Stefan Schulz
+ * @copyright 2026 Stefan Schulz
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
  */
 declare(strict_types=1);
@@ -42,10 +42,13 @@ require_once __DIR__ . '/../../vendor/autoload.php';
  */
 class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontController
 {
-    private Module $module;
+    public $module;
     private string|false $feature;
     private string|false $heading;
 
+    /**
+     * @throws PrestaShopException
+     */
     public function __construct()
     {
         $this->module = Module::getInstanceByName(Definitions::MODULE_NAME);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Stefan Schulz
+ * Copyright 2026 Stefan Schulz
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  * @author    Stefan Schulz <schulz@the-loom.de>
- * @copyright 2025 Stefan Schulz
+ * @copyright 2026 Stefan Schulz
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
  */
 declare(strict_types=1);
@@ -68,7 +68,6 @@ class FeatureNavigatorProductSearchProvider implements ProductSearchProviderInte
             'pl.`description_short`',
             'pl.`link_rewrite`',
             'pl.`meta_description`',
-            'pl.`meta_keywords`',
             'pl.`meta_title`',
             'pl.`name`',
             'pl.`available_now`',

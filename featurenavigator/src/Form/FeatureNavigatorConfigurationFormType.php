@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Stefan Schulz
+ * Copyright 2026 Stefan Schulz
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  * @author    Stefan Schulz <schulz@the-loom.de>
- * @copyright 2025 Stefan Schulz
+ * @copyright 2026 Stefan Schulz
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
  */
 declare(strict_types=1);
@@ -37,9 +37,9 @@ use PrestaShopBundle\Form\Admin\Type\TranslatableType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FeatureNavigatorConfigurationFormType extends TranslatorAwareType
 {
@@ -48,11 +48,10 @@ class FeatureNavigatorConfigurationFormType extends TranslatorAwareType
     private FormChoiceProviderInterface $featureChoiceProvider;
 
     public function __construct(
-        TranslatorInterface         $translator,
-        array                       $locales,
+        TranslatorInterface $translator,
+        array $locales,
         FormChoiceProviderInterface $featuresChoiceProvider,
-    )
-    {
+    ) {
         parent::__construct($translator, $locales);
         $this->featureChoiceProvider = $featuresChoiceProvider;
     }

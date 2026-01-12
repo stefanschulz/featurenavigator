@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Stefan Schulz
+ * Copyright 2026 Stefan Schulz
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  * @author    Stefan Schulz <schulz@the-loom.de>
- * @copyright 2025 Stefan Schulz
+ * @copyright 2026 Stefan Schulz
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
  */
 declare(strict_types=1);
@@ -42,11 +42,11 @@ class FeatureNavigator extends Module
     {
         $this->name = Definitions::MODULE_NAME;
         $this->author = 'Stefan Schulz';
-        $this->version = '1.0.1';
+        $this->version = '1.1.0';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
             'min' => '8.0.0',
-            'max' => '8.99.99',
+            'max' => '9.99.99',
         ];
         $this->tab = 'front_office_features';
 
@@ -55,6 +55,8 @@ class FeatureNavigator extends Module
 
         $this->displayName = $this->trans('Feature Navigator', [], Definitions::TRANS_ADMIN);
         $this->description = $this->trans('Navigate based on a feature.', [], Definitions::TRANS_ADMIN);
+
+        $this->confirmUninstall = $this->trans('Are you sure you want to uninstall?', [], Definitions::TRANS_ADMIN);
     }
 
     public function install(): bool
@@ -71,8 +73,18 @@ class FeatureNavigator extends Module
             && parent::uninstall();
     }
 
+    /**
+     * Install or update configuration data.
+     * @return bool true, if successful
+     *
+     * @throws PrestaShopException
+     */
     private function installConfigs(): bool
     {
+        if (Shop::isFeatureActive()) {
+            Shop::setContext(Shop::CONTEXT_ALL);
+        }
+
         return Configuration::updateValue(SourceOptions::CONFIG, SourceOptions::getDefault())
             && Configuration::updateValue(DirectionOptions::CONFIG, DirectionOptions::getDefault()->getValue())
             && Configuration::updateValue(HeadingOptions::CONFIG, []);
