@@ -182,7 +182,6 @@ class FeatureNavigator extends Module
      */
     public function hookDisplayBackOfficeHeader()
     {
-        //        return '<script type="module" src="' . $this->getPathUri() . 'views/js/form.js">';
         $this->context->controller->addJS($this->getPathUri() . 'views/js/form.js');
     }
 }
