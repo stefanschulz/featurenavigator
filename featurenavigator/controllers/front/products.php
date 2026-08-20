@@ -150,7 +150,7 @@ class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontC
 
     private function prepareFeatureValue(string $featureValue): string
     {
-        return str_replace("'", "''", urldecode($featureValue));
+        return pSQL(urldecode($featureValue));
     }
 
     private function ensureHeading(false|string $heading): string
