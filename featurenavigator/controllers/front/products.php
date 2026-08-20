@@ -73,7 +73,7 @@ class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontC
                 'baseUrl' => 'featurenavigator',
                 'heading' => $this->ensureHeading($this->heading),
                 'feature' => $this->feature,
-                'featureValue' => urldecode($featureValue),
+                'featureValue' => $featureValue,
             ]
         );
         $template = '../../../modules/featurenavigator/views/templates/front/products.tpl';
@@ -150,7 +150,7 @@ class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontC
 
     private function prepareFeatureValue(string $featureValue): string
     {
-        return pSQL(urldecode($featureValue));
+        return pSQL($featureValue);
     }
 
     private function ensureHeading(false|string $heading): string
@@ -181,11 +181,10 @@ class FeatureNavigatorProductsModuleFrontController extends ProductListingFrontC
             return false;
         }
         try {
-            $topic = urldecode($featureValue);
             $result = $db->executeS($sql, true, false);
             foreach ($result as $row) {
-                if ($row['topic'] == $topic) {
-                    return $topic;
+                if ($row['topic'] == $featureValue) {
+                    return $featureValue;
                 }
             }
         } catch (PrestaShopDatabaseException $e) {

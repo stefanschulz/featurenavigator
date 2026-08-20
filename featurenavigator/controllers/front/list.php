@@ -92,7 +92,7 @@ class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
             $topic = $row['topic'];
             $entries[] = [
                 'topic' => $topic,
-                'param' => urlencode($topic),
+                'param' => rawurlencode($topic),
             ];
         }
 
