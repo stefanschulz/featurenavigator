@@ -42,7 +42,7 @@ class FeatureNavigator extends Module
     {
         $this->name = Definitions::MODULE_NAME;
         $this->author = 'Stefan Schulz';
-        $this->version = '1.1.0';
+        $this->version = '1.1.1';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
             'min' => '8.0.0',
