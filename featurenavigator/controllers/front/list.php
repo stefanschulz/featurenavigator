@@ -48,7 +48,7 @@ class FeatureNavigatorListModuleFrontController extends \ModuleFrontController
         parent::initContent();
         $letter = Tools::getValue('letter', 'a');
         $heading = Configuration::get(HeadingOptions::CONFIG, $this->context->language->id);
-        $source = Configuration::get(SourceOptions::CONFIG);
+        $source = Configuration::get(SourceOptions::CONFIG) ?: SourceOptions::getDefault();
         $direction = DirectionOptions::getOrDefault(Configuration::get(DirectionOptions::CONFIG));
         $entries = $this->getEntriesFilteredBy($letter, $source, $direction);
         $this->context->smarty->assign(
