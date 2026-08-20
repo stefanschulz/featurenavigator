@@ -2,7 +2,7 @@
   "name": "the-loom/featurenavigator",
   "description": "Navigate products via a feature",
   "minimum-stability": "stable",
-  "license": "AFL-3.0",
+  "license": "Apache-2.0",
   "type": "prestashop-module",
   "authors": [
     {
