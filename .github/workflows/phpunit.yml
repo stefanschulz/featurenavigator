@@ -10,5 +10,5 @@ jobs:
         with:
           php-version: '8.1'
           extensions: mbstring,intl,zip
-      - run: composer install --prefer-dist --no-progress
-      - run: vendor/bin/phpunit   # reads phpunit.xml.dist automatically
+      - run: cd featurenavigator && composer install --prefer-dist --no-progress
+      - run: cd featurenavigator && vendor/bin/phpunit   # reads phpunit.xml.dist automatically
