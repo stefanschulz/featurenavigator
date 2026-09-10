@@ -10,4 +10,7 @@ jobs:
         with:
           php-version: '8.4'
           extensions: mbstring,intl,zip
-      - run: cd featurenavigator && composer install --prefer-dist --no-progress && ./vendor/bin/phpunit
+      - run: |
+          cd featurenavigator
+          composer install --prefer-dist --no-progress
+          ./vendor/bin/phpunit
