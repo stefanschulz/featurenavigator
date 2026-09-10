@@ -6,8 +6,8 @@
          failOnWarning="true"
          verbose="true">
     <testsuites>
-        <testsuite name="Unit"><directory>./tests/Unit</directory></testsuite>
-        <testsuite name="Integration"><directory>./tests/Integration</directory></testsuite>
+        <testsuite name="Unit"><directory suffix="Test.php">./tests/Unit</directory></testsuite>
+        <testsuite name="Integration"><directory suffix="Test.php">./tests/Integration</directory></testsuite>
     </testsuites>
     <php>
         <!-- Adjust PS_ROOT_DIR if CI runs from a different location -->

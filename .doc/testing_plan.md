@@ -45,7 +45,7 @@ Both directories have been created.
 Placed at the repository root.
 
 ---
-### 4️⃣ Bootstrap (`tests/bootstrap.php`)
+### 4️⃣ Bootstrap (`../featurenavigator/tests/bootstrap.php`)
 ```php
 <?php
 declare(strict_types=1);
