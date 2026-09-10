@@ -4,7 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Locate the PrestaShop installation (the module lives inside a shop).
-$psRoot = realpath(__DIR__ . '/../../..'); // <shop_root>
+$psRoot = realpath(__DIR__ . '/../..'); // <shop_root>
 if (!$psRoot || !file_exists($psRoot . '/config/config.inc.php')) {
     fwrite(STDERR, "Cannot find PrestaShop config.inc.php – aborting tests.\n");
     exit(1);
