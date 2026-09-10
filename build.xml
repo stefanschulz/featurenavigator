@@ -15,6 +15,10 @@
         <zip destfile="${folder}-${version}.zip">
             <fileset dir=".">
                 <include name="${folder}/**"/>
+                <!-- Exclude test files and PHPUnit configuration from the release package -->
+                <exclude name="${folder}/tests/**"/>
+                <exclude name="${folder}/phpunit.xml.dist"/>
+                <exclude name="${folder}/.phpunit.result.cache"/>
             </fileset>
         </zip>
         <phingcall target="composer.install.development"/>
