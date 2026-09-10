@@ -20,6 +20,22 @@ if (!class_exists('Shop')) {
         public static function addSqlRestrictionOnLang(string $lang) {
             return " AND id_lang = " . intval($lang);
         }
+
+        public static function addSqlAssociation(string $table, string $alias): string {
+            return " JOIN `" . _DB_PREFIX_ . $table . "` " . $alias . " ON (p.id_product = " . $alias . ".id_product)";
+        }
+    }
+}
+
+if (!class_exists('Db')) {
+    class Db {
+        public function executeS(string $sql, bool $multiline = false, bool $cache = false): array {
+            return [];
+        }
+
+        public function getValue(string $sql, bool $multiline = false, bool $cache = false) {
+            return 0;
+        }
     }
 }
 
