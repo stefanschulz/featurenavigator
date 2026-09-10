@@ -46,3 +46,21 @@ class ProductSearchResult {
         return $this->totalCount;
     }
 }
+
+namespace PrestaShop\PrestaShop\Core\Form;
+
+interface FormDataProviderInterface {
+    public function getData(): array;
+    public function setData(array $data): array;
+}
+
+// Global namespace for Db
+class Db {
+    public function executeS(string $sql, bool $multiline = false, bool $cache = false): array {
+        return [];
+    }
+
+    public function getValue(string $sql, bool $multiline = false, bool $cache = false) {
+        return 0;
+    }
+}
