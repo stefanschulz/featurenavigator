@@ -54,6 +54,17 @@ You can report issues with this module in the module's repository. [Click here t
 
 This module is released under the [Apache License 2.0][Apache-2.0]
 
+## Testing
+
+You can run the test suite locally with:
+
+```bash
+composer install          # installs dev dependencies (PHPUnit, testing-framework)
+vendor/bin/phpunit       # runs both unit and integration suites
+```
+
+The CI workflow (`.github/workflows/phpunit.yml`) executes the same command on every push.
+
 [report-issue]: https://github.com/stefanschulz/featurenavigator/issues
 
 [Apache-2.0]: https://www.apache.org/licenses/LICENSE-2.0
