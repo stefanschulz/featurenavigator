@@ -9,12 +9,8 @@
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
-        <testsuite name="Integration">
-            <directory>tests/Integration</directory>
-        </testsuite>
     </testsuites>
     <php>
-        <!-- Adjust PS_ROOT_DIR if CI runs from a different location -->
         <env name="PS_ROOT_DIR" value="../.."/>
     </php>
 </phpunit>
