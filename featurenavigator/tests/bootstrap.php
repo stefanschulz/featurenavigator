@@ -11,6 +11,9 @@ if (!defined('_PS_VERSION_')) {
 // Define PrestaShop constants and mocks for unit testing.
 define('_DB_PREFIX_', 'ps_');
 
+require_once __DIR__ . '/Mocks/PrestaShopMock.php';
+require_once __DIR__ . '/Mocks/DataConfigurationMock.php';
+
 // Mock Shop class if it doesn't exist or is not fully loaded.
 if (!class_exists('Shop')) {
     class Shop {
