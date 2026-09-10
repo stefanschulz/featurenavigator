@@ -2,7 +2,7 @@
 
 - **composer.json**: added dev requirement `phpunit/phpunit ^9` (Phase 1 completed).
 - Added folder **tests/** with subfolders **Unit** and **Integration** (Phase 2 completed). *(Integration folder is currently empty but kept for future tests.)*
-- Created **phpunit.xml.dist** (root) – defines Unit and Integration test suites and bootstrap path (Phase 3 completed).
+- Added **phpunit.xml.dist** inside `featurenavigator/` – defines Unit and Integration test suites and bootstrap path (Phase 3 completed).
 - Implemented **tests/bootstrap.php** to load Composer, PrestaShop core (`config.inc.php`) and the module entry point (Phase 4 completed).
 - Added a unit test **tests/Unit/SourceOptionsTest.php** covering `SourceOptions::adjustValue` (Phase 5 completed).
 - Updated **README.md** with a *Testing* section and usage instructions (Phase 7 completed).
